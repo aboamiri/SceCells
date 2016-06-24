@@ -592,11 +592,6 @@ RawDataInput_M CellInitHelper::generateRawInput_M() {
 		randNum = (double) rand() / ((double) RAND_MAX + 1) * progDivStart;
 		//std::cout << "rand init growth progress = " << randNum << std::endl;
 //Ali to make the initial progree of all nodes zero
-
-		if (randNum < 0.6)//AAMIRI
-			randNum = randNum +0.2;
-
-
  
 		rawData.cellGrowProgVec.push_back(randNum);
 	//	rawData.cellGrowProgVec.push_back(0.0);

@@ -216,7 +216,7 @@ void MembrPara::initFromConfig() {
 }
 
 SceCells::SceCells() {
-	curTime = 0;
+	curTime = 0 + 55800.0;//AAMIRI
 }
 
 void SceCells::growAtRandom(double d_t) {
@@ -606,7 +606,7 @@ SceCells::SceCells(SceNodes* nodesInput,
 		countingBegin(0), initIntnlNodeCount(
 				nodesInput->getAllocPara().maxNodeOfOneCell / 2), initGrowthProgress(
 				0.0) {
-	curTime = 0.0;
+	curTime = 0.0 + 55800.0;//AAMIRI
 
 	initialize(nodesInput);
 
@@ -622,7 +622,7 @@ SceCells::SceCells(SceNodes* nodesInput,
 		std::vector<uint>& initActiveMembrNodeCounts,
 		std::vector<uint>& initActiveIntnlNodeCounts,
 		std::vector<double> &initGrowProgVec) {
-	curTime = 0.0;
+	curTime = 0.0+55800.0;//AAMIRI
 	tmpDebug = false;
 	aniDebug = false;
 	membrPara.initFromConfig();
@@ -1805,7 +1805,10 @@ void SceCells::applyMemForce_M() {
         cout<<"The maximum location in X is="<<MaxX<< endl;  
         cout<<"The minimum location in Y is="<<MinY<< endl;  
         cout<<"The maximum location in Y is="<<MaxY<< endl;  
-        //Ali 
+        
+	cout << "**********============== curTime is equal to: ==========**********       " << curTime << endl;//AAMIRI
+
+	//Ali 
 	double* nodeLocXAddr = thrust::raw_pointer_cast(
 			&(nodes->getInfoVecs().nodeLocX[0]));
 	double* nodeLocYAddr = thrust::raw_pointer_cast(
@@ -2198,6 +2201,7 @@ void SceCells::divide2D_M() {
 }
 
 void SceCells::distributeCellGrowthProgress_M() {
+
 	totalNodeCountForActiveCells = allocPara_m.currentActiveCellCount
 			* allocPara_m.maxAllNodePerCell;
 	thrust::counting_iterator<uint> countingBegin(0);
@@ -2214,6 +2218,14 @@ void SceCells::distributeCellGrowthProgress_M() {
 							DivideFunctor(allocPara_m.maxAllNodePerCell))),
 			nodes->getInfoVecs().nodeGrowPro.begin()
 					+ allocPara_m.bdryNodeCount);
+
+	if (curTime <= 55800.0+dt)//AAMIRI added
+	thrust::copy(
+			cellInfoVecs.growthProgress.begin(),
+			cellInfoVecs.growthProgress.end(),
+			cellInfoVecs.lastCheckPoint.begin()
+					);
+
 }
 
 void SceCells::allComponentsMove_M() {
