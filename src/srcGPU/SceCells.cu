@@ -221,7 +221,7 @@ void MembrPara::initFromConfig() {
 }
 
 SceCells::SceCells() {
-	curTime = 0;
+	curTime = 0+55800.0;
 }
 
 void SceCells::growAtRandom(double d_t) {
@@ -611,7 +611,7 @@ SceCells::SceCells(SceNodes* nodesInput,
 		countingBegin(0), initIntnlNodeCount(
 				nodesInput->getAllocPara().maxNodeOfOneCell / 2), initGrowthProgress(
 				0.0) {
-	curTime = 0.0;
+	curTime = 0.0+55800.0;
 
 	initialize(nodesInput);
 
@@ -627,7 +627,7 @@ SceCells::SceCells(SceNodes* nodesInput,
 		std::vector<uint>& initActiveMembrNodeCounts,
 		std::vector<uint>& initActiveIntnlNodeCounts,
 		std::vector<double> &initGrowProgVec) {
-	curTime = 0.0;
+	curTime = 0.0+55800.0;
 	tmpDebug = false;
 	aniDebug = false;
 	membrPara.initFromConfig();
@@ -2390,6 +2390,13 @@ void SceCells::distributeCellGrowthProgress_M() {
 							DivideFunctor(allocPara_m.maxAllNodePerCell))),
 			nodes->getInfoVecs().nodeGrowPro.begin()
 					+ allocPara_m.bdryNodeCount);
+
+			if (curTime <= 55800.0+dt)//AAMIRI
+				thrust::copy(
+					cellInfoVecs.growthProgress.begin(),
+					cellInfoVecs.growthProgress.end(),
+					cellInfoVecs.lastCheckPoint.begin()
+				);
 }
 
 void SceCells::allComponentsMove_M() {
