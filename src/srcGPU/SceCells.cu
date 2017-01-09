@@ -2321,9 +2321,9 @@ void SceCells::growAtRandom_M(double dt) {
 
 	addPointIfScheduledToGrow_M();
 
-	//decideIsScheduleToShrink_M();// AAMIRI May5
+	decideIsScheduleToShrink_M();// AAMIRI May5
 
-	//delPointIfScheduledToGrow_M();//AAMIRI - commented out on June20
+	delPointIfScheduledToGrow_M();//AAMIRI - commented out on June20
 
 	adjustGrowthInfo_M();
 }
@@ -2657,13 +2657,10 @@ void SceCells::delPointIfScheduledToGrow_M() {
 
 	int timeStep = curTime/dt;
 
-	if (curTime>70000.0 && curTime<70000.1){
 
 	decideIsScheduleToShrink_M();// AAMIRI
-	}
 
  
-	if (curTime > 70000.0)
 	thrust::transform(
 			thrust::make_zip_iterator(
 					thrust::make_tuple(cellInfoVecs.isScheduledToShrink.begin(),

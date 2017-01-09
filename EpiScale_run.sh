@@ -1,15 +1,14 @@
 #!/bin/csh
 
-#$ -M anematba@nd.edu	 # Email address for job notification
+#$ -M aamiri@nd.edu	 # Email address for job notification
 #$ -m  abe		 # Send mail when job begins, ends and aborts
 #$ -q  *@@acms_gpu 	 # Specify queue
 #s -pe smp 4 
-#$ -N  run_May11	 # Specify job name
+#$ -N  wndBdry	 # Specify job name
 
 
 module load gcc/4.9.2
-module load cuda/7.0
-module load bertini 
+module load cuda/7.0 
 module load boost/1.58
 echo -n "It is currently: ";date
 echo -n "I am logged on as ";who am i

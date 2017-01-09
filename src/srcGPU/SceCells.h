@@ -1229,7 +1229,7 @@ struct isDelOp: public thrust::unary_function<UiDDBool, bool> {
 			return resBool;}
 
 		double distToLaser = sqrt( (_laserCenterX-CellCenterX)*(_laserCenterX-CellCenterX) + (_laserCenterY-CellCenterY)*(_laserCenterY-CellCenterY) );
-		if (distToLaser < _ablationRadius){
+		if (cellRank==41 || cellRank==42 || cellRank==51 || cellRank==52 || cellRank==53 || cellRank==62 || cellRank==63){
 		    resBool = true;}
 
 		return resBool;
@@ -1461,7 +1461,7 @@ struct DelPtOp_M: thrust::unary_function<BoolUIDDUIUIBoolD, UiUiBD> {
 		bool isCellActive = thrust::get<6>(biddi);
 		double growthSpeed = thrust::get<7>(biddi);
 
-		if (!isScheduledToShrink || (isIntnlEmptied && isMembrEmptied) /*|| cellRank != 0*/ ) {
+		if ( !isScheduledToShrink || (isIntnlEmptied && isMembrEmptied)) {
 			return thrust::make_tuple(activeMembrNodeThis, activeIntnlNodeThis, isCellActive, growthSpeed);
 		}
 		
