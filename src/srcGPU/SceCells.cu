@@ -221,7 +221,7 @@ void MembrPara::initFromConfig() {
 }
 
 SceCells::SceCells() {
-	curTime = 0;
+	curTime = 0 + 55800.0;
 }
 
 void SceCells::growAtRandom(double d_t) {
@@ -611,7 +611,7 @@ SceCells::SceCells(SceNodes* nodesInput,
 		countingBegin(0), initIntnlNodeCount(
 				nodesInput->getAllocPara().maxNodeOfOneCell / 2), initGrowthProgress(
 				0.0) {
-	curTime = 0.0;
+	curTime = 0.0+55800.0;
 
 	initialize(nodesInput);
 
@@ -627,7 +627,7 @@ SceCells::SceCells(SceNodes* nodesInput,
 		std::vector<uint>& initActiveMembrNodeCounts,
 		std::vector<uint>& initActiveIntnlNodeCounts,
 		std::vector<double> &initGrowProgVec) {
-	curTime = 0.0;
+	curTime = 0.0 + 55800.0;
 	tmpDebug = false;
 	aniDebug = false;
 	membrPara.initFromConfig();
@@ -2315,9 +2315,9 @@ void SceCells::growAtRandom_M(double dt) {
 
 	addPointIfScheduledToGrow_M();
 
-	//decideIsScheduleToShrink_M();// AAMIRI May5
+	decideIsScheduleToShrink_M();// AAMIRI May5
 
-	//delPointIfScheduledToGrow_M();//AAMIRI - commented out on June20
+	delPointIfScheduledToGrow_M();//AAMIRI - commented out on June20
 
 	adjustGrowthInfo_M();
 }
@@ -2354,6 +2354,13 @@ void SceCells::distributeCellGrowthProgress_M() {
 							DivideFunctor(allocPara_m.maxAllNodePerCell))),
 			nodes->getInfoVecs().nodeGrowPro.begin()
 					+ allocPara_m.bdryNodeCount);
+
+	if (curTime <= 55800.0+dt)//AAMIRI added
+	thrust::copy(
+			cellInfoVecs.growthProgress.begin(),
+			cellInfoVecs.growthProgress.end(),
+			cellInfoVecs.lastCheckPoint.begin()
+					);
 }
 
 void SceCells::allComponentsMove_M() {
@@ -2644,13 +2651,10 @@ void SceCells::delPointIfScheduledToGrow_M() {
 
 	int timeStep = curTime/dt;
 
-	if (curTime>70000.0 && curTime<70000.1){
 
 	decideIsScheduleToShrink_M();// AAMIRI
-	}
 
- 
-	if (curTime > 70000.0)
+	if (curTime > 55800.2) 
 	thrust::transform(
 			thrust::make_zip_iterator(
 					thrust::make_tuple(cellInfoVecs.isScheduledToShrink.begin(),

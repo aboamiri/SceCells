@@ -1228,8 +1228,9 @@ struct isDelOp: public thrust::unary_function<UiDDBool, bool> {
 			return resBool;}
 
 		double distToLaser = sqrt( (_laserCenterX-CellCenterX)*(_laserCenterX-CellCenterX) + (_laserCenterY-CellCenterY)*(_laserCenterY-CellCenterY) );
-		if (distToLaser < _ablationRadius){
-		    resBool = true;}
+
+		if (cellRank==41 || cellRank==42 || cellRank==51 || cellRank==52 || cellRank==53 || cellRank==62 || cellRank==63){    
+		resBool = true;}
 
 		return resBool;
 	}
@@ -1460,7 +1461,7 @@ struct DelPtOp_M: thrust::unary_function<BoolUIDDUIUIBoolD, UiUiBD> {
 		bool isCellActive = thrust::get<6>(biddi);
 		double growthSpeed = thrust::get<7>(biddi);
 
-		if (!isScheduledToShrink || (isIntnlEmptied && isMembrEmptied) /*|| cellRank != 0*/ ) {
+		if ( !isScheduledToShrink || (isIntnlEmptied && isMembrEmptied)) {	
 			return thrust::make_tuple(activeMembrNodeThis, activeIntnlNodeThis, isCellActive, growthSpeed);
 		}
 		
@@ -1473,7 +1474,7 @@ struct DelPtOp_M: thrust::unary_function<BoolUIDDUIUIBoolD, UiUiBD> {
 				activeIntnlNodeThis);
 
 		double delta = 0.000001;
-		if (/*!isIntnlEmptied*/activeIntnlNodeThis>1 && _timeStep%80==0){
+		if (/*!isIntnlEmptied*/activeIntnlNodeThis>1 && _timeStep%60==0){
 		_nodeXPosAddress[cellNodeEndPos-1] = 0.0 + delta;
 		_nodeYPosAddress[cellNodeEndPos-1] = 0.0 + delta;
 		_nodeIsActiveAddress[cellNodeEndPos-1] = false;
@@ -1482,7 +1483,7 @@ struct DelPtOp_M: thrust::unary_function<BoolUIDDUIUIBoolD, UiUiBD> {
 		activeIntnlNodeThis = activeIntnlNodeThis - 1;
 		}
 
-		if (/*!isMembrEmptied*/activeMembrNodeThis>2 && _timeStep%50==0){
+		if (/*!isMembrEmptied*/activeMembrNodeThis>2 && _timeStep%40==0){
 		    for (int m=randMembID; m<membEndNode; m++){
 			_nodeXPosAddress[m] = _nodeXPosAddress[m+1];
 			_nodeYPosAddress[m] = _nodeYPosAddress[m+1];
@@ -2101,7 +2102,7 @@ struct BC_Tissue_Damp: public thrust::unary_function<CVec3,CVec2> {
                 double Dist=sqrt (
                             (CenterCellX-TCenterX)*(CenterCellX-TCenterX)+
                            (CenterCellY-TCenterY)*(CenterCellY-TCenterY)) ; 
-                double Damp=_Damp_Coef + max(0.0,Dist/TRadius-0.8)*1.0/(1.0-0.8)*20*_Damp_Coef     ;              
+                double Damp=_Damp_Coef + max(0.0,Dist/TRadius-0.8)*1.0/(1.0-0.8)*10*_Damp_Coef     ;              
                         
 			return thrust::make_tuple(CenterCellX,Damp);
 		}
